@@ -5,6 +5,9 @@ import L from "leaflet";
 import { MapContainer, TileLayer, GeoJSON, LayersControl } from "react-leaflet";
 import Header from "./Header";
 import { BASE_LAYERS } from "./baseLayers";
+//import * as React from 'react';
+//import Stack from '@mui/material/Stack';
+//mport Button from '@mui/material/Button';
 
 const OUTER_BOUNDS = [
   [-80, -180],
@@ -79,14 +82,19 @@ function Map() {
   useEffect(() => {
     const url = `${BASE_URL}/${minMag}_${timespan}.geojson`;
     fetchQuakeData(url);
-  }, []);
+  }, [minMag, timespan]);
 
   // console.log(quakesJson);
 
   return (
     <>
       <CssBaseline />
-      <Header />
+      <Header
+        minMag={minMag}
+        setMinMag={setMinMag}
+        timespan={timespan}
+        setTimespan={setTimespan}
+      />
       <MapContainer
         style={{ height: "100vh" }}
         center={[0, 0]}
@@ -96,13 +104,16 @@ function Map() {
         maxBoundsViscosity={1}
       >
         <LayersControl position="topright">
-          {BASE_LAYERS.map(baseLayer => (
+          {BASE_LAYERS.map((baseLayer) => (
             <LayersControl.BaseLayer
               key={baseLayer.url}
               checked={baseLayer.checked}
               name={baseLayer.name}
             >
-              <TileLayer attribution={baseLayer.attribution} url={baseLayer.url} />
+              <TileLayer
+                attribution={baseLayer.attribution}
+                url={baseLayer.url}
+              />
             </LayersControl.BaseLayer>
           ))}
 
